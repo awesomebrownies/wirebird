@@ -214,13 +214,19 @@ class _MyHomePageState extends State<MyHomePage> {
               // line(3, 15, !connected),
             ],
           ),
+          const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                  'INTERNET'
+              )
+          ),
           line(3, 6, connected),
           connectionButton(),
           line(3, 50, connected),
           selectable('assets/images/server_rack.png', 'Not Selected'),
           line(3, 50, connected),
+          const Text('CONNECTIONS'),
           line(screenWidth - (screenWidth * 2 / 5) + 110, 3, true),
-          const Text('ACTIVE CONNECTIONS'),
           Expanded(
             child: _activeConnections == null
                 ? const Center(
