@@ -151,7 +151,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 spacing: 20.0,
                 dotSize: 1.0,
               ),
-              // line(80, 3, _wifiName != null),
               selectable(
                 'assets/images/router.png',
                 _wifiName ?? 'No Wi-Fi',
@@ -167,20 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // line(3, 15, !connected),
-               line(screenWidth / 2 - screenWidth / 5, 3, !connected),
-              // SizedBox(
-              //   width: (screenWidth/2 - screenWidth/5),
-              // ),
-              // AnimatedLineConnector(
-              //   // startPoint: const Offset(0, 0),  // Starting point
-              //   // endPoint: Offset(-(screenWidth/2 - screenWidth/5), 000),
-              //   distance: (screenWidth/2- screenWidth/5),
-              //   angle: 180,
-              //   color: Colors.black38,
-              //   spacing: 20.0,
-              //   animationSpeed: 1.0,
-              // ),
+              line(screenWidth / 2 - screenWidth / 5, 3, !connected),
               Stack(
                 children: [
                   SizedBox(
@@ -198,20 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              // AnimatedLineConnector(
-              //   // startPoint: const Offset(0, 0),  // Starting point
-              //   // endPoint: Offset((screenWidth/2 - screenWidth/5), 000),
-              //   distance: (screenWidth/2 - screenWidth/5),
-              //   angle: 0,
-              //   color: Colors.black38,
-              //   spacing: 20.0,
-              //   animationSpeed: connected ? 1.0 : 0.1,
-              // ),
-              // SizedBox(
-              //   width: (screenWidth/2 - screenWidth/5),
-              // ),
               line(screenWidth / 2 - screenWidth / 5, 3, !connected),
-              // line(3, 15, !connected),
             ],
           ),
           const Padding(
