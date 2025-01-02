@@ -38,7 +38,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool connected = false;
-  double _rotationAngle = 0.0; // Keeps track of the rotation angle
 
   final NetworkInfo _networkInfo = NetworkInfo();
   final Connectivity _connectivity = Connectivity();
@@ -76,7 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _toggleConnection() {
     setState(() {
       connected = !connected;
-      _rotationAngle = connected ? 0.25 : 0.0;
     });
   }
 
@@ -166,25 +164,20 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              line(screenWidth / 2 - screenWidth / 5, 3, !connected),
-              Stack(
-                children: [
-                  SizedBox(
-                    height: 60,
-                    child: Image.asset('assets/images/switch_track.png'),
-                  ),
-                  AnimatedRotation(
-                    turns: _rotationAngle, // Rotates in turns (0.25 = 90 degrees)
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                    child: SizedBox(
-                      height: 60,
-                      child: Image.asset('assets/images/switch_rail.png'),
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: 20,
+                child: Image.asset('assets/images/o.png'),
               ),
-              line(screenWidth / 2 - screenWidth / 5, 3, !connected),
+              line(screenWidth / 2 - screenWidth / 5, 3, true),
+              selectable(
+                'assets/images/packet_inspection.png',
+                'Inspection',
+              ),
+              line(screenWidth / 2 - screenWidth / 5, 3, true),
+              SizedBox(
+                height: 20,
+                child: Image.asset('assets/images/x.png'),
+              ),
             ],
           ),
           const Padding(
