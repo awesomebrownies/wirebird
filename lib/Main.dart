@@ -125,98 +125,103 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    double contentWidth = screenWidth - (screenWidth * 2 / 5) + 110; // Width of the grid content
 
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'LOCAL NETWORK'
-            )
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              selectable(
-                'assets/images/laptop.png',
-                '$_userName@$_hostName',
+      body: Center(
+        child: SizedBox(
+          width: contentWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
+            children: <Widget>[
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('LOCAL NETWORK'),
               ),
-              const AnimatedLineConnector(
-                distance: 200,
-                angle: 0,
-                color: Colors.black38,
-                spacing: 20.0,
-                dotSize: 1.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  selectable(
+                    'assets/images/laptop.png',
+                    '$_userName@$_hostName',
+                  ),
+                  const AnimatedLineConnector(
+                    distance: 200,
+                    angle: 0,
+                    color: Colors.black38,
+                    spacing: 20.0,
+                    dotSize: 1.0,
+                  ),
+                  selectable(
+                    'assets/images/router.png',
+                    _wifiName ?? 'No Wi-Fi',
+                  ),
+                ],
               ),
-              selectable(
-                'assets/images/router.png',
-                _wifiName ?? 'No Wi-Fi',
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('FIREWALL'),
               ),
-            ],
-          ),
-          const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                  'FIREWALL'
-              )
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 20,
-                child: Image.asset('assets/images/o.png'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 20,
+                    child: Image.asset('assets/images/o.png'),
+                  ),
+                  line(screenWidth / 2 - screenWidth / 5, 3, true),
+                  selectable(
+                    'assets/images/packet_inspection.png',
+                    'Inspection',
+                  ),
+                  line(screenWidth / 2 - screenWidth / 5, 3, true),
+                  SizedBox(
+                    height: 20,
+                    child: Image.asset('assets/images/x.png'),
+                  ),
+                ],
               ),
-              line(screenWidth / 2 - screenWidth / 5, 3, true),
-              selectable(
-                'assets/images/packet_inspection.png',
-                'Inspection',
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('INTERNET'),
               ),
-              line(screenWidth / 2 - screenWidth / 5, 3, true),
-              SizedBox(
-                height: 20,
-                child: Image.asset('assets/images/x.png'),
-              ),
-            ],
-          ),
-          const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                  'INTERNET'
-              )
-          ),
-          line(3, 6, connected),
-          connectionButton(),
-          line(3, 50, connected),
-          selectable('assets/images/server_rack.png', 'Not Selected'),
-          line(3, 50, connected),
-          const Text('CONNECTIONS'),
-          line(screenWidth - (screenWidth * 2 / 5) + 110, 3, true),
-          Expanded(
-            child: _activeConnections == null
-                ? const Center(
+              Center(
                 child: Column(
-                  children: <Widget>[
-                    Text("No active connections found"),
-                    CircularProgressIndicator(
-                      strokeWidth: 1.0,
-                    )
+                  children: [
+                    line(3, 6, connected),
+                    connectionButton(),
+                    line(3, 50, connected),
+                    selectable('assets/images/server_rack.png', 'Not Selected'),
+                    line(3, 50, connected),
                   ],
-                ))
-                : Center(
-                  child: Container(
-                    constraints: BoxConstraints(maxWidth: screenWidth - (screenWidth * 2 / 5) + 110),
-                    child: GridView.builder(
-                                    shrinkWrap: true,
-                                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('CONNECTIONS'),
+              ),
+              line(contentWidth, 3, true),
+              Expanded(
+                child: _activeConnections == null
+                    ? const Center(
+                    child: Column(
+                      children: <Widget>[
+                        Text("No active connections found"),
+                        CircularProgressIndicator(
+                          strokeWidth: 1.0,
+                        )
+                      ],
+                    ))
+                    : GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 150,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                     childAspectRatio: 0.7,
-                                    ),
-                                    itemCount: _activeConnections!.length,
-                                    itemBuilder: (context, index) {
+                  ),
+                  itemCount: _activeConnections!.length,
+                  itemBuilder: (context, index) {
                     final entry = _activeConnections!.entries.elementAt(index);
                     final appName = entry.key;
                     final appData = entry.value;
@@ -261,12 +266,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                     );
-                                    },
-                                  ),
-                  ),
+                  },
                 ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
