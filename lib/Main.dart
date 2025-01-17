@@ -131,96 +131,96 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Center(
         child: SizedBox(
-          // width: contentWidth,
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
-            children: <Widget>[
-              Section(
-                title: 'LOCAL NETWORK',
-                color: const Color.fromARGB(255,240,240,240),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    selectable(
-                      'assets/images/laptop.png',
-                      '$_userName@$_hostName',
-                    ),
-                    const AnimatedLineConnector(
-                      distance: 200,
-                      angle: 0,
-                      color: Colors.black38,
-                      spacing: 20.0,
-                      dotSize: 1.0,
-                    ),
-                    selectable(
-                      'assets/images/router.png',
-                      _wifiName ?? 'No Wi-Fi',
-                    ),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Section(
+                  title: 'LOCAL NETWORK',
+                  color: const Color.fromARGB(255, 240, 240, 240),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      selectable(
+                        'assets/images/laptop.png',
+                        '$_userName@$_hostName',
+                      ),
+                      const AnimatedLineConnector(
+                        distance: 200,
+                        angle: 0,
+                        color: Colors.black38,
+                        spacing: 20.0,
+                        dotSize: 1.0,
+                      ),
+                      selectable(
+                        'assets/images/router.png',
+                        _wifiName ?? 'No Wi-Fi',
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Section(
-                title: 'FIREWALL',
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 20,
-                      child: Image.asset('assets/images/o.png'),
-                    ),
-                    line(screenWidth / 2 - screenWidth / 5, 3, true),
-                    selectable(
-                      'assets/images/packet_inspection.png',
-                      'Inspection',
-                    ),
-                    line(screenWidth / 2 - screenWidth / 5, 3, true),
-                    SizedBox(
-                      height: 20,
-                      child: Image.asset('assets/images/x.png'),
-                    ),
-                  ],
+                Section(
+                  title: 'FIREWALL',
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        child: Image.asset('assets/images/o.png'),
+                      ),
+                      line(screenWidth / 2 - screenWidth / 5, 3, true),
+                      selectable(
+                        'assets/images/packet_inspection.png',
+                        'Inspection',
+                      ),
+                      line(screenWidth / 2 - screenWidth / 5, 3, true),
+                      SizedBox(
+                        height: 20,
+                        child: Image.asset('assets/images/x.png'),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Section(
-                title: 'SPLIT TUNNEL',
-                color: const Color.fromARGB(255, 240, 240, 240),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    line(2, 3, true),
-                    SizedBox(
+                Section(
+                  title: 'SPLIT TUNNEL',
+                  color: const Color.fromARGB(255, 240, 240, 240),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      line(2, 3, true),
+                      SizedBox(
                         height: 50,
-                        child: Image.asset(connected ? 'assets/images/path_divider_turn.png' : 'assets/images/path_divider_straight.png')
-                    ),
-                    line(screenWidth/2, 3, true),
-                  ],
+                        child: Image.asset(
+                          connected ? 'assets/images/path_divider_turn.png' : 'assets/images/path_divider_straight.png',
+                        ),
+                      ),
+                      line(screenWidth / 2, 3, true),
+                    ],
+                  ),
                 ),
-              ),
-              //Internet Section, Should have all of the VPN servers you can select
-              Section(
-                title: 'INTERNET',
-                color: const Color.fromARGB(255, 255, 255, 255),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    line(3, 6, connected),
-                    connectionButton(),
-                    line(3, 20, connected),
-                    selectable('assets/images/server_rack.png', 'Not Selected'),
-                    line(3, 20, connected),
-                  ],
+                Section(
+                  title: 'INTERNET',
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      line(3, 6, connected),
+                      connectionButton(),
+                      line(3, 20, connected),
+                      selectable('assets/images/server_rack.png', 'Not Selected'),
+                      line(3, 20, connected),
+                    ],
+                  ),
                 ),
-              ),
-              Section(
-                title: 'CONNECTIONS',
-                color: const Color.fromARGB(255, 240, 240, 249),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    line(contentWidth, 3, true),
-                    _activeConnections == null
-                        ? const Center(
+                Section(
+                  title: 'CONNECTIONS',
+                  color: const Color.fromARGB(255, 240, 240, 249),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      line(contentWidth, 3, true),
+                      _activeConnections == null
+                          ? const Center(
                         child: Column(
                           children: <Widget>[
                             Text("No active connections found"),
@@ -228,67 +228,72 @@ class _MyHomePageState extends State<MyHomePage> {
                               strokeWidth: 1.0,
                             )
                           ],
-                        ))
-                        : GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 150,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 0.7,
-                      ),
-                      itemCount: _activeConnections!.length,
-                      itemBuilder: (context, index) {
-                        final entry = _activeConnections!.entries.elementAt(index);
-                        final appName = entry.key;
-                        final appData = entry.value;
-                        final iconProvider = appData['iconProvider'];
-                        final appFullName = appData['fullName'];
+                        ),
+                      )
+                          : GridView.builder(
+                        physics:
+                        const NeverScrollableScrollPhysics(), // Ensures GridView doesn't scroll independently
+                        shrinkWrap: true,
+                        gridDelegate:
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 150,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.7,
+                        ),
+                        itemCount: _activeConnections!.length,
+                        itemBuilder: (context, index) {
+                          final entry = _activeConnections!.entries.elementAt(index);
+                          final appName = entry.key;
+                          final appData = entry.value;
+                          final iconProvider = appData['iconProvider'];
+                          final appFullName = appData['fullName'];
 
-                        return Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (iconProvider != null)
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Image(
-                                      image: iconProvider,
-                                      height: 48,
-                                      width: 48,
-                                      errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.question_answer, size: 48),
-                                    ),
-                                  )
-                                else
-                                  const Icon(Icons.settings, size: 48),
-                                Text(
-                                  appName,
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                                if (appFullName != '')
+                          return Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (iconProvider != null)
+                                    Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Image(
+                                        image: iconProvider,
+                                        height: 48,
+                                        width: 48,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                        const Icon(Icons.question_answer, size: 48),
+                                      ),
+                                    )
+                                  else
+                                    const Icon(Icons.settings, size: 48),
                                   Text(
-                                    appFullName,
-                                    style: Theme.of(context).textTheme.titleMedium,
+                                    appName,
+                                    style: Theme.of(context).textTheme.labelSmall,
                                     textAlign: TextAlign.center,
                                   ),
-                                Text(
-                                  '${appData['count']}',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                              ],
+                                  if (appFullName != '')
+                                    Text(
+                                      appFullName,
+                                      style: Theme.of(context).textTheme.titleMedium,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  Text(
+                                    '${appData['count']}',
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                  ]
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
