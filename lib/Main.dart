@@ -212,13 +212,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Text(
-              //       'CONNECTIONS',
-              //       style: Theme.of(context).textTheme.titleSmall,
-              //   ),
-              // ),
               Section(
                 title: 'CONNECTIONS',
                 color: const Color.fromARGB(255, 240, 240, 249),
