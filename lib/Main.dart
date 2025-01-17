@@ -168,12 +168,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 20,
                         child: Image.asset('assets/images/o.png'),
                       ),
-                      line(screenWidth / 2 - screenWidth / 5, 3, true),
+                      line(screenWidth*0.75*0.5 - 80, 3, true),
                       selectable(
                         'assets/images/packet_inspection.png',
                         'Inspection',
                       ),
-                      line(screenWidth / 2 - screenWidth / 5, 3, true),
+                      line(screenWidth*0.75*0.5 - 80, 3, true),
                       SizedBox(
                         height: 20,
                         child: Image.asset('assets/images/x.png'),
