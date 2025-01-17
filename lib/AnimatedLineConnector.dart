@@ -25,19 +25,18 @@ class OptimizedDottedLinePainter extends CustomPainter {
     final paint = Paint()
       ..color = color
       ..isAntiAlias = false;
-
     final dx = cos(angle);
     final dy = sin(angle);
 
     final totalDots = (distance / spacing).ceil();
 
-    for (int i = 0; i < totalDots; i++) {
-      final offset = (i * spacing + progress * spacing) % distance;
+    for (int i = -1; i < totalDots; i++) {
+      final offset = (i * spacing + progress * spacing) /*% distance*/;
       if (offset > distance) continue;
 
-      final startX = offset * dx - 20;
+      final startX = offset * dx;
       final startY = offset * dy;
-      final endX = offset * dx + (8) -20;
+      final endX = offset * dx + (8);
       final endY = offset * dy + (2);
 
       // final rect = Rect.fromCircle(center: Offset(x, y), radius: dotSize);
@@ -103,7 +102,7 @@ class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.distance-40,
+      width: widget.distance - 40,
       height: widget.dotSize * 2,
       child: RepaintBoundary(
         child: CustomPaint(
