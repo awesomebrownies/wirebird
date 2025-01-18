@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import 'AnimatedLineConnector.dart';
-import 'NetstatMonitor.dart';
+import 'DottedWireless.dart';
+import 'backend/NetstatMonitor.dart';
 import 'Section.dart';
+import 'SolidWire.dart';
 
 void main() {
   runApp(const MyApp());
@@ -168,12 +169,18 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 20,
                         child: Image.asset('assets/images/o.png'),
                       ),
-                      line(screenWidth*0.75*0.5 - 80, 3, true),
+                      SolidWire(
+                        width: screenWidth*0.75*0.5 - 80,
+                        activated: true,
+                      ),
                       selectable(
                         'assets/images/packet_inspection.png',
                         'Inspection',
                       ),
-                      line(screenWidth*0.75*0.5 - 80, 3, true),
+                      SolidWire(
+                        width: screenWidth*0.75*0.5 - 80,
+                        activated: true,
+                      ),
                       SizedBox(
                         height: 20,
                         child: Image.asset('assets/images/x.png'),
@@ -187,14 +194,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      line(2, 3, true),
+                      SolidWire(width: 3, height: 2, activated: true),
                       SizedBox(
                         height: 50,
                         child: Image.asset(
                           connected ? 'assets/images/path_divider_turn.png' : 'assets/images/path_divider_straight.png',
                         ),
                       ),
-                      line(screenWidth / 2, 3, true),
+                      SolidWire(width: screenWidth/2, activated: true)
                     ],
                   ),
                 ),
@@ -204,11 +211,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      line(3, 6, connected),
+                      SolidWire(width: 3, height: 6, activated: connected),
                       connectionButton(),
-                      line(3, 20, connected),
+                      SolidWire(width: 3, height: 20, activated: connected),
                       selectable('assets/images/server_rack.png', 'Not Selected'),
-                      line(3, 20, connected),
+                      SolidWire(width: 3, height: 20, activated: connected),
                     ],
                   ),
                 ),
@@ -218,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      line(contentWidth, 3, true),
+                      SolidWire(width: contentWidth, activated: true),
                       _activeConnections == null
                           ? const Center(
                         child: Column(
@@ -296,22 +303,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  SizedBox line(double width, double height, bool activated) {
-    Color color = Colors.black12;
-    if (activated) {
-      color = Colors.black38;
-    }
-
-    return SizedBox(
-      width: width,
-      child: Divider(
-        height: height,
-        thickness: height,
-        color: color,
       ),
     );
   }
