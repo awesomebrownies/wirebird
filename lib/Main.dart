@@ -56,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
   String? _userName;
   String? _hostName;
 
+  String? inspectorSelection;
+
   @override
   void initState() {
     super.initState();
@@ -128,6 +130,12 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  void setInspectorSelection(String name){
+    setState((){
+      inspectorSelection = name;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,30 +144,31 @@ class _MyHomePageState extends State<MyHomePage> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                Text('$inspectorSelection'),
                 Section(
                   title: 'LOCAL NETWORK',
                   color: const Color.fromARGB(255, 240, 240, 240),
-                  child: LocalNetwork(wifiName: _wifiName, userName: _userName, hostName: _hostName),
+                  child: LocalNetwork(wifiName: _wifiName, userName: _userName, hostName: _hostName, setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
                 ),
                 Section(
                   title: 'FIREWALL',
                   color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Firewall(),
+                  child: Firewall(setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
                 ),
                 Section(
                   title: 'SPLIT TUNNEL',
                   color: const Color.fromARGB(255, 240, 240, 240),
-                  child: SplitTunnel(connected: connected, toggleConnection: _toggleConnection,),
+                  child: SplitTunnel(connected: connected, toggleConnection: _toggleConnection, setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
                 ),
                 Section(
                   title: 'INTERNET',
                   color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Internet(connected: connected),
+                  child: Internet(connected: connected, setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
                 ),
                 Section(
                   title: 'CONNECTIONS',
                   color: const Color.fromARGB(255, 240, 240, 240),
-                  child: Connections(activeConnections: _activeConnections,),
+                  child: Connections(activeConnections: _activeConnections),
                 ),
               ],
             ),

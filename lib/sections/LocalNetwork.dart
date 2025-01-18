@@ -9,10 +9,16 @@ class LocalNetwork extends StatelessWidget{
     final String? userName;
     final String? hostName;
 
+    final Function setSelected;
+    final String? inspectorSelection;
+
     const LocalNetwork({super.key,
       this.wifiName,
       this.userName,
       this.hostName,
+
+      required this.setSelected,
+      required this.inspectorSelection,
     });
 
   @override
@@ -23,6 +29,8 @@ class LocalNetwork extends StatelessWidget{
         Selectable(
           imagePath: 'assets/images/laptop.png',
           description: '$userName@$hostName',
+          inspectorSelection: inspectorSelection,
+          onClick: () => setSelected("Device"),
         ),
         const AnimatedLineConnector(
           distance: 200,
@@ -31,7 +39,11 @@ class LocalNetwork extends StatelessWidget{
           spacing: 20.0,
           dotSize: 1.0,
         ),
-        Selectable(imagePath: 'assets/images/router.png', description: wifiName ?? 'No Wi-Fi')
+        Selectable(
+            imagePath: 'assets/images/router.png',
+            description: wifiName ?? 'No Wi-Fi',
+            inspectorSelection: inspectorSelection,
+            onClick: () => setSelected("Router"),)
       ],
     );
   }

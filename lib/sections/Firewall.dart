@@ -5,6 +5,14 @@ import '../SolidWire.dart';
 
 class Firewall extends StatelessWidget {
 
+  final Function setSelected;
+  final String? inspectorSelection;
+
+  const Firewall({super.key,
+    required this.setSelected,
+    required this.inspectorSelection,
+  });
+
   @override
   Widget build(BuildContext context){
     double screenWidth = MediaQuery.of(context).size.width;
@@ -16,15 +24,17 @@ class Firewall extends StatelessWidget {
           child: Image.asset('assets/images/o.png'),
         ),
         SolidWire(
-          width: screenWidth*0.75*0.5 - 80,
+          width: screenWidth*0.75*0.5 - 56,
           activated: true,
         ),
-        const Selectable(
+        Selectable(
           imagePath: 'assets/images/packet_inspection.png',
           description: 'Inspection',
+          inspectorSelection: inspectorSelection,
+          onClick: () => setSelected("Inspection"),
         ),
         SolidWire(
-          width: screenWidth*0.75*0.5 - 80,
+          width: screenWidth*0.75*0.5 - 56,
           activated: true,
         ),
         SizedBox(

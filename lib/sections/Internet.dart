@@ -7,8 +7,14 @@ import '../SolidWire.dart';
 class Internet extends StatelessWidget{
   final bool connected;
 
+  final Function setSelected;
+  final String? inspectorSelection;
+
   const Internet({super.key,
     required this.connected,
+
+    required this.setSelected,
+    required this.inspectorSelection,
   });
 
   @override
@@ -17,7 +23,11 @@ class Internet extends StatelessWidget{
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SolidWire(width: 3, height: 20, activated: connected),
-        const Selectable(imagePath: 'assets/images/server_rack.png', description: 'Not Selected'),
+        Selectable(
+            imagePath: 'assets/images/server_rack.png',
+            description: 'Not Selected',
+            inspectorSelection: inspectorSelection,
+            onClick: () => setSelected("Proxy Server"),),
         SolidWire(width: 3, height: 20, activated: connected),
       ],
     );
