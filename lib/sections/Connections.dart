@@ -11,7 +11,7 @@ class Connections extends StatelessWidget {
   @override
   Widget build(BuildContext context){
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         activeConnections == null
             ? const Center(

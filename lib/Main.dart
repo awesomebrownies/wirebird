@@ -149,12 +149,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 Section(
                   title: 'SPLIT TUNNEL',
                   color: const Color.fromARGB(255, 240, 240, 240),
-                  child: SplitTunnel(connected: connected),
+                  child: SplitTunnel(connected: connected, toggleConnection: _toggleConnection,),
                 ),
                 Section(
                   title: 'INTERNET',
                   color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Internet(connected: connected, toggleConnection: _toggleConnection),
+                  child: Internet(connected: connected),
                 ),
                 Section(
                   title: 'CONNECTIONS',
