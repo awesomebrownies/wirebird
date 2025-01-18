@@ -44,12 +44,13 @@ class SplitTunnel extends StatelessWidget{
           children: [
             ConnectionButton(connected: connected, toggleConnection: toggleConnection),
             Padding(
-              padding: const EdgeInsets.only(left: 35.0, right: 80.0),
-              child: SolidWire(width: 3, height: 100, activated: connected),
+              padding: const EdgeInsets.only(left: 35.0, right: 95.0),
+              child: SolidWire(width: 3, height: 110, activated: connected),
             ),
             Selectable(
               imagePath: 'assets/images/control_center.png',
-              description: 'Control Center',
+              title: 'Control Center',
+              description: 'No Controls',
               inspectorSelection: inspectorSelection,
               onClick: () => setSelected("Control Center"),
             )

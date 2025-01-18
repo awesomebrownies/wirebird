@@ -1,14 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Selectable extends StatelessWidget{
   final String imagePath;
+  final String title;
   final String description;
   final String? inspectorSelection;
   final Function onClick;
 
   const Selectable({super.key,
     required this.imagePath,
+    required this.title,
     required this.description,
     required this.inspectorSelection,
     required this.onClick,
@@ -16,30 +17,41 @@ class Selectable extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = inspectorSelection == description;
+    bool isSelected = inspectorSelection == title;
 
     return GestureDetector(
       onTap: () => onClick(),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: isSelected ? Colors.blue : Colors.transparent,
-            width: 2.0,
-          )
-        ),
-        child: Column(
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 70, child: Image.asset(imagePath)),
-            Text(
-              description,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: isSelected ? Colors.blue : Colors.black,
-              )
+      child: Stack(
+        clipBehavior: Clip.none, // Ensures the border can extend outside the widget
+        children: [
+          // Border layer
+          Positioned(
+            top: -6.0, // Negative values to extend the border outward
+            bottom: -6.0,
+            left: -6.0,
+            right: -6.0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,// Border color
+              ),
             ),
-          ],
-        ),
+          ),
+          // Content layer
+          Column(
+            children: [
+              SizedBox(height: 70, child: Image.asset(imagePath)),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+              Text(
+                description,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

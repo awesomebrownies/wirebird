@@ -28,6 +28,7 @@ class LocalNetwork extends StatelessWidget{
       children: [
         Selectable(
           imagePath: 'assets/images/laptop.png',
+          title: 'Device',
           description: '$userName@$hostName',
           inspectorSelection: inspectorSelection,
           onClick: () => setSelected("Device"),
@@ -41,6 +42,7 @@ class LocalNetwork extends StatelessWidget{
         ),
         Selectable(
             imagePath: 'assets/images/router.png',
+            title: 'Router',
             description: wifiName ?? 'No Wi-Fi',
             inspectorSelection: inspectorSelection,
             onClick: () => setSelected("Router"),)

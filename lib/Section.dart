@@ -36,7 +36,10 @@ class Section extends StatelessWidget{
                   ),
                 ),
               ),
-              child,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: child,
+              ),
             ],
           ),
         ),
