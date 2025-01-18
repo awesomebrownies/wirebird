@@ -130,8 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: Center(
         child: SizedBox(
@@ -160,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Section(
                   title: 'CONNECTIONS',
-                  color: const Color.fromARGB(255, 240, 240, 249),
+                  color: const Color.fromARGB(255, 240, 240, 240),
                   child: Connections(activeConnections: _activeConnections,),
                 ),
               ],

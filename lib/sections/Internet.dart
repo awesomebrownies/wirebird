@@ -17,7 +17,7 @@ class Internet extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SolidWire(width: 3, height: 6, activated: connected),
         ConnectionButton(connected: connected, toggleConnection: toggleConnection),
