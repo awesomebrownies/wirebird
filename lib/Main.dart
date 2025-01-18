@@ -131,7 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double contentWidth = screenWidth - (screenWidth * 2 / 5) + 110; // Width of the grid content
 
     return Scaffold(
       body: Center(
