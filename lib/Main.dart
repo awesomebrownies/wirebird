@@ -3,8 +3,12 @@ import 'dart:async';
 import 'dart:io';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-
-import 'DottedWireless.dart';
+import 'package:wirebird/sections/Connections.dart';
+import 'package:wirebird/sections/Firewall.dart';
+import 'package:wirebird/sections/Internet.dart';
+import 'package:wirebird/sections/LocalNetwork.dart';
+import 'package:wirebird/sections/SplitTunnel.dart';
+import 'Selectable.dart';
 import 'backend/NetstatMonitor.dart';
 import 'Section.dart';
 import 'SolidWire.dart';
@@ -138,214 +142,33 @@ class _MyHomePageState extends State<MyHomePage> {
                 Section(
                   title: 'LOCAL NETWORK',
                   color: const Color.fromARGB(255, 240, 240, 240),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      selectable(
-                        'assets/images/laptop.png',
-                        '$_userName@$_hostName',
-                      ),
-                      const AnimatedLineConnector(
-                        distance: 200,
-                        angle: 0,
-                        color: Colors.black38,
-                        spacing: 20.0,
-                        dotSize: 1.0,
-                      ),
-                      selectable(
-                        'assets/images/router.png',
-                        _wifiName ?? 'No Wi-Fi',
-                      ),
-                    ],
-                  ),
+                  child: LocalNetwork(wifiName: _wifiName, userName: _userName, hostName: _hostName),
                 ),
                 Section(
                   title: 'FIREWALL',
                   color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                        child: Image.asset('assets/images/o.png'),
-                      ),
-                      SolidWire(
-                        width: screenWidth*0.75*0.5 - 80,
-                        activated: true,
-                      ),
-                      selectable(
-                        'assets/images/packet_inspection.png',
-                        'Inspection',
-                      ),
-                      SolidWire(
-                        width: screenWidth*0.75*0.5 - 80,
-                        activated: true,
-                      ),
-                      SizedBox(
-                        height: 20,
-                        child: Image.asset('assets/images/x.png'),
-                      ),
-                    ],
-                  ),
+                  child: Firewall(),
                 ),
                 Section(
                   title: 'SPLIT TUNNEL',
                   color: const Color.fromARGB(255, 240, 240, 240),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SolidWire(width: 3, height: 2, activated: true),
-                      SizedBox(
-                        height: 50,
-                        child: Image.asset(
-                          connected ? 'assets/images/path_divider_turn.png' : 'assets/images/path_divider_straight.png',
-                        ),
-                      ),
-                      SolidWire(width: screenWidth/2, activated: true)
-                    ],
-                  ),
+                  child: SplitTunnel(connected: connected),
                 ),
                 Section(
                   title: 'INTERNET',
                   color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SolidWire(width: 3, height: 6, activated: connected),
-                      connectionButton(),
-                      SolidWire(width: 3, height: 20, activated: connected),
-                      selectable('assets/images/server_rack.png', 'Not Selected'),
-                      SolidWire(width: 3, height: 20, activated: connected),
-                    ],
-                  ),
+                  child: Internet(connected: connected, toggleConnection: _toggleConnection),
                 ),
                 Section(
                   title: 'CONNECTIONS',
                   color: const Color.fromARGB(255, 240, 240, 249),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SolidWire(width: contentWidth, activated: true),
-                      _activeConnections == null
-                          ? const Center(
-                        child: Column(
-                          children: <Widget>[
-                            Text("No active connections found"),
-                            CircularProgressIndicator(
-                              strokeWidth: 1.0,
-                            )
-                          ],
-                        ),
-                      )
-                          : GridView.builder(
-                        physics:
-                        const NeverScrollableScrollPhysics(), // Ensures GridView doesn't scroll independently
-                        shrinkWrap: true,
-                        gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 150,
-                          mainAxisSpacing: 10,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 0.7,
-                        ),
-                        itemCount: _activeConnections!.length,
-                        itemBuilder: (context, index) {
-                          final entry = _activeConnections!.entries.elementAt(index);
-                          final appName = entry.key;
-                          final appData = entry.value;
-                          final iconProvider = appData['iconProvider'];
-                          final appFullName = appData['fullName'];
-
-                          return Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (iconProvider != null)
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Image(
-                                        image: iconProvider,
-                                        height: 48,
-                                        width: 48,
-                                        errorBuilder: (context, error, stackTrace) =>
-                                        const Icon(Icons.question_answer, size: 48),
-                                      ),
-                                    )
-                                  else
-                                    const Icon(Icons.settings, size: 48),
-                                  Text(
-                                    appName,
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  if (appFullName != '')
-                                    Text(
-                                      appFullName,
-                                      style: Theme.of(context).textTheme.titleMedium,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  Text(
-                                    '${appData['count']}',
-                                    style: Theme.of(context).textTheme.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                  child: Connections(activeConnections: _activeConnections,),
                 ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  TextButton connectionButton() {
-    MaterialColor color = Colors.lightGreen;
-    String text = 'Proxy Server';
-    if (connected) {
-      color = Colors.red;
-      text = 'Direct Lane';
-    }
-    return TextButton(
-        style: TextButton.styleFrom(
-          backgroundColor: color,
-          minimumSize: const Size(150, 50),
-        ),
-        onPressed: _toggleConnection,
-        child: Column(
-          children: [
-            const Text(
-              'Switch track to:',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-            Text(
-              text,
-              style: Theme.of(context).textTheme.labelSmall,
-            )
-          ],
-        ));
-  }
-
-  Column selectable(String imagePath, String description) {
-    return Column(
-      children: [
-        SizedBox(height: 70, child: Image.asset(imagePath)),
-        Text(
-          description,
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 }
