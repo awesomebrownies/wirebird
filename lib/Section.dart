@@ -28,9 +28,12 @@ class Section extends StatelessWidget{
             children: [
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleSmall,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 2.0),
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ),
               ),
               child,
