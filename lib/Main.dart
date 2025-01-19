@@ -58,6 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String? inspectorSelection;
 
+  var inspectorController = OverlayPortalController();
+
   @override
   void initState() {
     super.initState();
@@ -132,48 +134,134 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void setInspectorSelection(String name){
     setState((){
-      inspectorSelection = name;
+      if(inspectorSelection == name){
+        inspectorController.toggle();
+        if(!inspectorController.isShowing){
+          inspectorSelection = null;
+        }
+      }else{
+        inspectorController.show();
+        inspectorSelection = name;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SizedBox(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Text('$inspectorSelection'),
-                Section(
-                  title: 'LOCAL NETWORK',
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  child: LocalNetwork(wifiName: _wifiName, userName: _userName, hostName: _hostName, setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
+      body: Stack(
+        children: [
+          // Main app content
+          GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              // Hide overlay if active
+              if (inspectorController.isShowing) {
+                inspectorController.hide();
+                setState(() {
+                  inspectorSelection = null;
+                });
+              }
+            },
+            child: Center(
+              child: SizedBox(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      Section(
+                        title: 'LOCAL NETWORK',
+                        color: const Color.fromARGB(255, 240, 240, 240),
+                        child: LocalNetwork(
+                          wifiName: _wifiName,
+                          userName: _userName,
+                          hostName: _hostName,
+                          setSelected: setInspectorSelection,
+                          inspectorSelection: inspectorSelection,
+                        ),
+                      ),
+                      Section(
+                        title: 'FIREWALL',
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        child: Firewall(
+                          setSelected: setInspectorSelection,
+                          inspectorSelection: inspectorSelection,
+                        ),
+                      ),
+                      Section(
+                        title: 'SPLIT TUNNEL',
+                        color: const Color.fromARGB(255, 240, 240, 240),
+                        child: SplitTunnel(
+                          connected: connected,
+                          toggleConnection: _toggleConnection,
+                          setSelected: setInspectorSelection,
+                          inspectorSelection: inspectorSelection,
+                        ),
+                      ),
+                      Section(
+                        title: 'INTERNET',
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        child: Internet(
+                          connected: connected,
+                          setSelected: setInspectorSelection,
+                          inspectorSelection: inspectorSelection,
+                        ),
+                      ),
+                      Section(
+                        title: 'CONNECTIONS',
+                        color: const Color.fromARGB(255, 240, 240, 240),
+                        child: Connections(activeConnections: _activeConnections),
+                      ),
+                    ],
+                  ),
                 ),
-                Section(
-                  title: 'FIREWALL',
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Firewall(setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
-                ),
-                Section(
-                  title: 'SPLIT TUNNEL',
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  child: SplitTunnel(connected: connected, toggleConnection: _toggleConnection, setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
-                ),
-                Section(
-                  title: 'INTERNET',
-                  color: const Color.fromARGB(255, 255, 255, 255),
-                  child: Internet(connected: connected, setSelected: setInspectorSelection, inspectorSelection: inspectorSelection,),
-                ),
-                Section(
-                  title: 'CONNECTIONS',
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  child: Connections(activeConnections: _activeConnections),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+
+          // Simplified OverlayPortal
+          if (inspectorController.isShowing)
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0, top: 50.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // Prevent overlay from closing on inside taps
+                  },
+                  child: SizedBox(
+                    width: 300.0,
+                    height: 200.0,
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8.0),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "$inspectorSelection",
+                            style: const TextStyle(fontSize: 18, color: Colors.black),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          // Any additional content for overlay goes here
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
