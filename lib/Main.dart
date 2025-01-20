@@ -3,15 +3,14 @@ import 'dart:async';
 import 'dart:io';
 import 'package:network_info_plus/network_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:wirebird/FieldRetrieval.dart';
 import 'package:wirebird/sections/Connections.dart';
 import 'package:wirebird/sections/Firewall.dart';
 import 'package:wirebird/sections/Internet.dart';
 import 'package:wirebird/sections/LocalNetwork.dart';
 import 'package:wirebird/sections/SplitTunnel.dart';
-import 'Selectable.dart';
 import 'backend/NetstatMonitor.dart';
 import 'Section.dart';
-import 'SolidWire.dart';
 
 void main() {
   runApp(const MyApp());
@@ -60,9 +59,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var inspectorController = OverlayPortalController();
 
+  //control the fields on each section
+  Map<String, List<dynamic>>? sectionFields;
+
+  // final wireguard = WireGuardFlutter.instance;
+
+
   @override
   void initState() {
     super.initState();
+    
+    // wireguardInitialize();
+    
+    sectionFields = {};
+    FieldRetrieval.populate(sectionFields!);
+
     _fetchWifiName();
     _updateActiveConnections();
     Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -82,12 +93,31 @@ class _MyHomePageState extends State<MyHomePage> {
     _retrieveSystemInfo();
   }
 
-  void _toggleConnection() {
+  Future<void> _toggleConnection() async {
+//     const String conf = '''[Interface]
+// PrivateKey = iMOwHxqSV9yWWwXx4j5V8aaRxXghHJrDgZ5o0Y/QoH0=
+// Address = 10.66.66.2/32,fd42:42:42::2/128
+//
+// [Peer]
+// PublicKey = bUjLyA3Ny3Z0kSSIJdSGCTwsHU2jm/ZXl+mN/SB/iFk=
+// PresharedKey = O7Oz3LtlRexiWNnn9VWJ22EslU4TJEaCpQzv04YmqAU=
+// Endpoint = 129.146.0.170:53686
+// AllowedIPs = 0.0.0.0/0,::/0''';
+//
+//     await wireguard.startVpn(serverAddress: '129.146.0.170:53686', wgQuickConfig: conf, providerBundleIdentifier: 'net.wirebird');
     setState(() {
       connected = !connected;
     });
   }
 
+  // Future<void> wireguardInitialize() async {
+  //   try {
+  //     await wireguard.initialize(interfaceName: 'wg0');
+  //     debugPrint("initialize success wg0");
+  //   } catch (error, stack) {
+  //     debugPrint("failed to initialize: $error\n$stack");
+  //   }
+  // }
 
   Future<void> _retrieveSystemInfo() async {
     try {
@@ -198,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       Section(
-                        title: 'INTERNET',
+                        title: 'GATEWAY',
                         color: const Color.fromARGB(255, 255, 255, 255),
                         child: Internet(
                           connected: connected,
@@ -218,7 +248,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
 
-          // Simplified OverlayPortal
           if (inspectorController.isShowing)
             Align(
               alignment: Alignment.topRight,
@@ -230,7 +259,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                   child: SizedBox(
                     width: 300.0,
-                    height: 200.0,
                     child: Container(
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
@@ -254,6 +282,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           const SizedBox(height: 16),
                           // Any additional content for overlay goes here
+                          Column(
+                            children: sectionFields?[inspectorSelection]
+                                ?.map<Widget>((field) {
+                              return field; // Replace with your desired widget
+                            })
+                                .toList() ??
+                                [],
+                          ),
                         ],
                       ),
                     ),
