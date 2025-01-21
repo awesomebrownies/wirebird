@@ -25,10 +25,10 @@ class Internet extends StatelessWidget{
         SolidWire(width: 3, height: 20, activated: connected),
         Selectable(
             imagePath: 'assets/images/server_rack.png',
-            title: 'Proxy Server',
+            title: 'VPN Server',
             description: 'Not Selected',
             inspectorSelection: inspectorSelection,
-            onClick: () => setSelected("Proxy Server"),),
+            onClick: () => setSelected("VPN Server"),),
         SolidWire(width: 3, height: 20, activated: connected),
       ],
     );

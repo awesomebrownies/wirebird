@@ -12,7 +12,9 @@ import 'package:wirebird/sections/SplitTunnel.dart';
 import 'backend/NetstatMonitor.dart';
 import 'Section.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
@@ -93,31 +95,51 @@ class _MyHomePageState extends State<MyHomePage> {
     _retrieveSystemInfo();
   }
 
+  Future<void> runWireGuard(String configFilePath) async {
+    try {
+      // Run wg-quick command
+      var result = await Process.run('pkexec', ['wg-quick', 'up', configFilePath],
+        runInShell: true,
+      );
+
+      if (result.exitCode == 0) {
+        print('WireGuard started successfully: ${result.stdout}');
+      } else {
+        print('Error starting WireGuard: ${result.stderr}');
+      }
+    } catch (e) {
+      print('Failed to run wg-quick: $e');
+    }
+  }
+
+  Future<void> stopWireGuard(String configFilePath) async {
+    try{
+      var result = await Process.run(
+        'pkexec', ['wg-quick', 'down', configFilePath],
+        runInShell: true,
+      );
+      if(result.exitCode == 0){
+        print('WireGuard stopped successfully: ${result.stdout}');
+      }else{
+        print('Error stopping WireGuard: ${result.stderr}');
+      }
+
+    }catch (e){
+      print('Failed to run wg-quick: $e');
+    }
+  }
+
   Future<void> _toggleConnection() async {
-//     const String conf = '''[Interface]
-// PrivateKey = iMOwHxqSV9yWWwXx4j5V8aaRxXghHJrDgZ5o0Y/QoH0=
-// Address = 10.66.66.2/32,fd42:42:42::2/128
-//
-// [Peer]
-// PublicKey = bUjLyA3Ny3Z0kSSIJdSGCTwsHU2jm/ZXl+mN/SB/iFk=
-// PresharedKey = O7Oz3LtlRexiWNnn9VWJ22EslU4TJEaCpQzv04YmqAU=
-// Endpoint = 129.146.0.170:53686
-// AllowedIPs = 0.0.0.0/0,::/0''';
-//
-//     await wireguard.startVpn(serverAddress: '129.146.0.170:53686', wgQuickConfig: conf, providerBundleIdentifier: 'net.wirebird');
+    if(connected){
+      stopWireGuard('/home/user/Downloads/wg_1.conf');
+    }else{
+      runWireGuard('/home/user/Downloads/wg_1.conf');
+    }
+  
     setState(() {
       connected = !connected;
     });
   }
-
-  // Future<void> wireguardInitialize() async {
-  //   try {
-  //     await wireguard.initialize(interfaceName: 'wg0');
-  //     debugPrint("initialize success wg0");
-  //   } catch (error, stack) {
-  //     debugPrint("failed to initialize: $error\n$stack");
-  //   }
-  // }
 
   Future<void> _retrieveSystemInfo() async {
     try {
@@ -252,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.only(right: 16.0, top: 50.0),
+                padding: const EdgeInsets.only(right: 0.0, top: 50.0),
                 child: GestureDetector(
                   onTap: () {
                     // Prevent overlay from closing on inside taps
@@ -275,6 +297,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
+                          Text(
+                            "SECTION NAME HERE",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
                           Text(
                             "$inspectorSelection",
                             style: const TextStyle(fontSize: 18, color: Colors.black),

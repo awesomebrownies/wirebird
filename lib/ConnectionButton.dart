@@ -13,7 +13,7 @@ class ConnectionButton extends StatelessWidget{
   @override
   Widget build(BuildContext context){
       MaterialColor color = Colors.lightGreen;
-      String text = 'Proxy Server';
+      String text = 'VPN Server';
       if (connected) {
         color = Colors.red;
         text = 'Direct Lane';
