@@ -6,8 +6,11 @@ class FieldRetrieval{
   //called in the init main function to populate the different fields without values
   static void populate(Map<String, List<dynamic>> sectionFields){
     sectionFields.addAll({
-      "Device": [Field(name: "Bluetooth"), Field(name: "Network controller (lspci)")],
-      "Router": [Field(name: "Signal Strength"),
+      "Device": [
+        Field(name: "Bluetooth"),
+        Field(name: "Network controller (lspci)")],
+      "Router": [
+        Field(name: "Signal Strength"),
         Field(name: "Link speed"),
         Field(name: "Security"),
         Field(name: "IPv4 Address"),
@@ -16,12 +19,14 @@ class FieldRetrieval{
         Field(name: "Supported Frequencies"),
         Field(name: "Default Route"),
         Field(name: "DNS"),],
-      "Inspection": [Field(name: "Blocked IPs"),
+      "Inspection": [
+        Field(name: "Blocked IPs"),
         Field(name: "Blocked Ports"),
         Field(name: "Automatic Split Tunnel on Block",),
         Field(name:"Wireguard Handshake Interval (Match NAT Session Timeout)",)],
-      "Control Center": [Field(name: "Whitelisted Networks"),
-      Field(name:"Blacklisted Networks"),],
+      "Control Center": [
+        Field(name: "Whitelisted Networks"),
+        Field(name:"Blacklisted Networks"),],
       "VPN Server": [Server()],
     });
 
