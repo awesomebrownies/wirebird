@@ -11,6 +11,7 @@ import 'package:wirebird/sections/LocalNetwork.dart';
 import 'package:wirebird/sections/SplitTunnel.dart';
 import 'backend/NetstatMonitor.dart';
 import 'Section.dart';
+import 'inspector/Server.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -130,12 +131,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _toggleConnection() async {
-    if(connected){
-      stopWireGuard('/home/user/Downloads/wg_1.conf');
-    }else{
-      runWireGuard('/home/user/Downloads/wg_1.conf');
+    final config = await Server.getSavedConfig();
+
+    if (config == null || config.isEmpty) {
+      // Show an error if no configuration is saved
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No server configuration found!")),
+      );
+      return;
     }
-  
+
+    final tempFilePath = '/tmp/wg_config.conf';
+    await File(tempFilePath).writeAsString(config);
+
+    if (connected) {
+      await stopWireGuard(tempFilePath);
+    } else {
+      await runWireGuard(tempFilePath);
+    }
+
     setState(() {
       connected = !connected;
     });
@@ -261,7 +275,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       Section(
                         title: 'CONNECTIONS',
                         color: const Color.fromARGB(255, 240, 240, 240),
-                        child: Connections(activeConnections: _activeConnections),
+                        child: Connections(
+                            activeConnections: _activeConnections
+                        ),
                       ),
                     ],
                   ),

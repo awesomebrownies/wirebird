@@ -6,6 +6,11 @@ class Server extends StatefulWidget {
 
   @override
   State<Server> createState() => _ServerState();
+
+  static Future<String?> getSavedConfig() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('server_config');
+  }
 }
 
 class _ServerState extends State<Server> {
@@ -16,6 +21,7 @@ class _ServerState extends State<Server> {
     super.initState();
     _loadSavedText();
   }
+
 
   // Method to load text from SharedPreferences
   Future<void> _loadSavedText() async {
