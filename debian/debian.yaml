@@ -1,0 +1,14 @@
+flutter_app:
+  command: wirebird
+  arch: x64
+  parent: /usr/local/lib
+  nonInteractive: false
+
+control:
+  Package: wirebird
+  Version: 0.1.0
+  Architecture: amd64
+  Priority: optional
+  Depends:
+  Maintainer:
+  Description: "A fully featured VPN service centered around privacy, customizability, and ease of access"
