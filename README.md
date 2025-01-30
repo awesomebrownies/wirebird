@@ -2,6 +2,8 @@
 
 An innovative solution to visualizing your internet traffic from source to destination. Wirebird supports extensive routing and data control.
 
+![Image](https://github.com/user-attachments/assets/ee9eb65b-8d57-41d2-8ac2-f3ab28497966)
+
 ## Features
 
 Everything in Wirebird is stored in modules. These include:
