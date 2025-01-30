@@ -1,16 +1,18 @@
-# wirebird
+# Wirebird
 
-A fully featured VPN service centered around privacy, customizability, and ease of access
+An innovative solution to visualizing your internet traffic from source to destination. Wirebird supports extensive routing and data control.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+Everything in Wirebird is stored in modules. These include:
+* Local Network
+* Firewall
+* Split Tunnel
+* Gateway
+* Connections
 
-A few resources to get you started if this is your first Flutter project:
+Each module contains selectables. A selectable for example, could be your computer. When opening it up, you'll be able to view network related information and modify things such as your MAC Address
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Demonstration
+
