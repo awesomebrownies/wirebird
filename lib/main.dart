@@ -65,21 +65,17 @@ class _MyHomePageState extends State<MyHomePage> {
   //control the fields on each section
   Map<String, List<dynamic>>? sectionFields;
 
-  // final wireguard = WireGuardFlutter.instance;
-
 
   @override
   void initState() {
     super.initState();
-    
-    // wireguardInitialize();
     
     sectionFields = {};
     FieldRetrieval.populate(sectionFields!);
 
     _fetchWifiName();
     _updateActiveConnections();
-    Timer.periodic(const Duration(seconds: 10), (timer) {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       _updateActiveConnections();
     });
 
