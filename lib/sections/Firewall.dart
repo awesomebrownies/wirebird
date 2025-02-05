@@ -30,7 +30,7 @@ class Firewall extends StatelessWidget {
         Selectable(
           imagePath: 'assets/images/packet_inspection.png',
           title: 'Inspection',
-          description: 'None',
+          description: 'Pass',
           inspectorSelection: inspectorSelection,
           onClick: () => setSelected("Inspection"),
         ),
