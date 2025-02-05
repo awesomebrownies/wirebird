@@ -33,12 +33,17 @@ class LocalNetwork extends StatelessWidget{
           inspectorSelection: inspectorSelection,
           onClick: () => setSelected("Device"),
         ),
-        const AnimatedLineConnector(
-          distance: 200,
-          angle: 0,
-          color: Colors.black38,
-          spacing: 20.0,
-          dotSize: 1.0,
+        if(wifiName != null)
+          const AnimatedLineConnector(
+            distance: 200,
+            angle: 0,
+            color: Colors.black38,
+            spacing: 20.0,
+            dotSize: 1.0,
+          ),
+        const SizedBox(
+          width: 160,
+          height: 0,
         ),
         Selectable(
             imagePath: 'assets/images/router.png',

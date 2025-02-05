@@ -25,25 +25,33 @@ class OptimizedDottedLinePainter extends CustomPainter {
     final paint = Paint()
       ..color = color
       ..isAntiAlias = false;
-    final dx = cos(angle);
-    final dy = sin(angle);
 
+    canvas.save(); // Save the canvas state
+
+    // Rotate the canvas around its center (or any custom pivot point)
+    canvas.translate(size.width / 2, size.height / 2);
+    canvas.rotate(angle);
+    canvas.translate(-size.width / 2, -size.height / 2);
+
+    final dx = cos(0); // Default direction after rotating canvas
+    final dy = sin(0);
     final totalDots = (distance / spacing).ceil();
 
     for (int i = -1; i < totalDots; i++) {
-      final offset = (i * spacing + progress * spacing) /*% distance*/;
+      final offset = (i * spacing + progress * spacing);
       if (offset > distance) continue;
 
       final startX = offset * dx;
       final startY = offset * dy;
-      final endX = offset * dx + (8);
-      final endY = offset * dy + (2);
+      final endX = min(offset * dx + 8, distance);
+      final endY = offset * dy + 2;
 
-      // final rect = Rect.fromCircle(center: Offset(x, y), radius: dotSize);
-      // canvas.drawOval(rect, paint);
       canvas.drawRect(Rect.fromPoints(Offset(startX, startY), Offset(endX, endY)), paint);
     }
+
+    canvas.restore(); // Restore the canvas to avoid affecting other drawings
   }
+
 
   @override
   bool shouldRepaint(OptimizedDottedLinePainter oldDelegate) {
@@ -101,20 +109,16 @@ class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.distance - 40,
-      height: widget.dotSize * 2,
-      child: RepaintBoundary(
-        child: CustomPaint(
-          size: Size(widget.distance, widget.dotSize * 2),
-          painter: OptimizedDottedLinePainter(
-            distance: widget.distance,
-            angle: widget.angle,
-            spacing: widget.spacing,
-            dotSize: widget.dotSize,
-            color: widget.color,
-            progress: _frames[_currentFrameIndex],
-          ),
+    return RepaintBoundary(
+      child: CustomPaint(
+        size: const Size(0, 0),
+        painter: OptimizedDottedLinePainter(
+          distance: widget.distance,
+          angle: widget.angle,
+          spacing: widget.spacing,
+          dotSize: widget.dotSize,
+          color: widget.color,
+          progress: _frames[_currentFrameIndex],
         ),
       ),
     );
