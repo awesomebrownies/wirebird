@@ -10,6 +10,7 @@ class OptimizedDottedLinePainter extends CustomPainter {
   final double dotSize;
   final Color color;
   final double progress;
+  final double shift;
 
   OptimizedDottedLinePainter({
     required this.distance,
@@ -18,6 +19,7 @@ class OptimizedDottedLinePainter extends CustomPainter {
     required this.dotSize,
     required this.color,
     required this.progress,
+    required this.shift,
   });
 
   @override
@@ -37,7 +39,7 @@ class OptimizedDottedLinePainter extends CustomPainter {
     final dy = sin(0);
     final totalDots = (distance / spacing).ceil();
 
-    for (int i = -1; i < totalDots; i++) {
+    for (double i = shift; i < totalDots; i++) {
       final offset = (i * spacing + progress * spacing);
       if (offset > distance) continue;
 
@@ -65,6 +67,7 @@ class AnimatedLineConnector extends StatefulWidget {
   final double spacing;
   final double dotSize;
   final Color color;
+  final double shift;
 
   const AnimatedLineConnector({
     Key? key,
@@ -73,6 +76,7 @@ class AnimatedLineConnector extends StatefulWidget {
     this.spacing = 20.0,
     this.dotSize = 2.0,
     this.color = Colors.blue,
+    this.shift = 0,
   }) : super(key: key);
 
   @override
@@ -119,6 +123,7 @@ class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
           dotSize: widget.dotSize,
           color: widget.color,
           progress: _frames[_currentFrameIndex],
+          shift: widget.shift,
         ),
       ),
     );
