@@ -39,7 +39,7 @@ class SplitTunnel extends StatelessWidget {
             ),
             !connected ? AnimatedLineConnector(
               distance: screenWidth * 0.75 / 2 - 100,
-              angle: 3.14,
+              angle: 3.1415,
               color: Colors.black38,
               spacing: 20.0,
               dotSize: 1.0,
