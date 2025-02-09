@@ -1,7 +1,39 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'dart:math';
+
+class AnimationSyncManager {
+  static final AnimationSyncManager _instance = AnimationSyncManager._internal();
+  final List<VoidCallback> _listeners = [];
+  double _progress = 0.0;
+  Timer? _timer;
+
+  AnimationSyncManager._internal() {
+    _startAnimation();
+  }
+
+  factory AnimationSyncManager() => _instance;
+
+  double get progress => _progress;
+
+  void _startAnimation() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _progress = (_progress + 0.33) % 1.0;
+      for (final listener in _listeners) {
+        listener();
+      }
+    });
+  }
+
+  void addListener(VoidCallback listener) {
+    _listeners.add(listener);
+  }
+
+  void removeListener(VoidCallback listener) {
+    _listeners.remove(listener);
+  }
+}
 
 class OptimizedDottedLinePainter extends CustomPainter {
   final double distance;
@@ -28,32 +60,28 @@ class OptimizedDottedLinePainter extends CustomPainter {
       ..color = color
       ..isAntiAlias = false;
 
-    canvas.save(); // Save the canvas state
+    canvas.save();
 
-    // Rotate the canvas around its center (or any custom pivot point)
     canvas.translate(size.width / 2, size.height / 2);
     canvas.rotate(angle);
     canvas.translate(-size.width / 2, -size.height / 2);
 
-    final dx = cos(0); // Default direction after rotating canvas
-    final dy = sin(0);
     final totalDots = (distance / spacing).ceil();
 
-    for (double i = shift; i < totalDots; i++) {
-      final offset = (i * spacing + progress * spacing);
+    for (double i = -1; i < totalDots; i++) {
+      final offset = (i * spacing + progress * spacing) + shift;
       if (offset > distance) continue;
 
-      final startX = offset * dx;
-      final startY = offset * dy;
-      final endX = min(offset * dx + 8, distance);
-      final endY = offset * dy + 2;
+      final startX = max(offset, shift);
+      final endX = min(offset + 9, distance);
 
-      canvas.drawRect(Rect.fromPoints(Offset(startX, startY), Offset(endX, endY)), paint);
+      if (startX > endX) continue;
+
+      canvas.drawRect(Rect.fromPoints(Offset(startX, -1), Offset(endX, 1)), paint);
     }
 
-    canvas.restore(); // Restore the canvas to avoid affecting other drawings
+    canvas.restore();
   }
-
 
   @override
   bool shouldRepaint(OptimizedDottedLinePainter oldDelegate) {
@@ -84,30 +112,25 @@ class AnimatedLineConnector extends StatefulWidget {
 }
 
 class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
-  // Cache frame values - we'll only use 3 frames
-  final List<double> _frames = [0.0, 0.33, 0.66];
-  int _currentFrameIndex = 0;
-  Timer? _timer;
+  double _progress = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _startAnimation();
+    final manager = AnimationSyncManager();
+    _progress = manager.progress;
+    manager.addListener(_onFrameUpdate);
   }
 
-  void _startAnimation() {
-    _timer?.cancel();
-    // Update every 333ms for 3 FPS
-    _timer = Timer.periodic(const Duration(milliseconds: 1000), (timer) {
-      setState(() {
-        _currentFrameIndex = (_currentFrameIndex + 1) % _frames.length;
-      });
+  void _onFrameUpdate() {
+    setState(() {
+      _progress = AnimationSyncManager().progress;
     });
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
+    AnimationSyncManager().removeListener(_onFrameUpdate);
     super.dispose();
   }
 
@@ -122,7 +145,7 @@ class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
           spacing: widget.spacing,
           dotSize: widget.dotSize,
           color: widget.color,
-          progress: _frames[_currentFrameIndex],
+          progress: _progress,
           shift: widget.shift,
         ),
       ),

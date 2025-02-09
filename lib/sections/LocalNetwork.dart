@@ -35,7 +35,7 @@ class LocalNetwork extends StatelessWidget{
         ),
         if(wifiName != null)
           const AnimatedLineConnector(
-            distance: 200,
+            distance: 175,
             angle: 0,
             color: Colors.black38,
             spacing: 20.0,
