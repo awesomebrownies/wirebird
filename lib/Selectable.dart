@@ -33,7 +33,6 @@ class Selectable extends StatelessWidget{
             child: Container(
               decoration: BoxDecoration(
                 color: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,
-                borderRadius: BorderRadius.circular(8.0),
               ),
             ),
           ),
