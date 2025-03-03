@@ -1,83 +1,147 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Connections extends StatelessWidget {
+class Connections extends StatefulWidget {
   final Map<String, Map<String, dynamic>>? activeConnections;
 
-  const Connections({super.key,
-    this.activeConnections,
-  });
+  const Connections({super.key, this.activeConnections});
 
   @override
-  Widget build(BuildContext context){
+  _ConnectionsState createState() => _ConnectionsState();
+}
+
+class _ConnectionsState extends State<Connections> {
+  List<bool> _isExpanded = [];
+  List<String> prevConnectionKeys = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeExpansionState();
+  }
+
+  @override
+  void didUpdateWidget(covariant Connections oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.activeConnections?.length != oldWidget.activeConnections?.length) {
+      _initializeExpansionState();
+    }
+  }
+
+  void _initializeExpansionState() {
+    setState(() {
+      final connectionKeys = widget.activeConnections?.keys.toList() ?? [];
+
+      List<bool> newIsExpanded = [];
+
+
+      //compare prevactiveconnections to new active connections
+      //loop prevactiveconnections until something changes
+      //determine if it is an addition or a removal
+      //  addition: make the new bool list value false, then shift list index back
+      //  subtraction: skip setting bool value, possibly add 1 to index?
+      int shift = 0;
+      for (int i = 0; i < connectionKeys.length; i++) {
+        if (i < prevConnectionKeys.length && prevConnectionKeys[i] == connectionKeys[i]) {
+          if (i + shift < _isExpanded.length) {
+            newIsExpanded.add(_isExpanded[i + shift]);
+          } else {
+            newIsExpanded.add(false);
+          }
+          continue;
+        }
+        if (i + 1 < connectionKeys.length && i < prevConnectionKeys.length && prevConnectionKeys[i] == connectionKeys[i + 1]) {
+          newIsExpanded.add(false);
+          shift++;
+        } else {
+          newIsExpanded.add(false);
+          shift--;
+        }
+      }
+
+      prevConnectionKeys = List.from(connectionKeys);
+      _isExpanded = newIsExpanded;
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final activeConnections = widget.activeConnections ?? {};
+    final connectionKeys = activeConnections.keys.toList();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        activeConnections == null
+        // const Text("Port"),
+        const Text("Application"),
+        // const Text("System"),
+        // const Text("Unix Domain Socket"),
+        activeConnections.isEmpty
             ? const Center(
           child: Column(
             children: <Widget>[
-              Text("No active connections found"),
-              CircularProgressIndicator(
-                strokeWidth: 1.0,
-              )
+              Padding(
+                padding: EdgeInsets.all(32.0),
+                child: Text("Looking for active connections..."),
+              ),
             ],
           ),
-        ) : Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 10.0,
-            runSpacing: 10.0,
-            children: activeConnections!.entries.map<Widget>((entry) {
-              final appName = entry.key;
-              final appData = entry.value;
-              final iconProvider = appData['iconProvider'];
-              final appFullName = appData['fullName'];
-
-              return SizedBox(
-                width: 150,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column (
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if(iconProvider != null)
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image(
-                              image: iconProvider,
-                              height: 48,
-                              width: 48,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.question_answer, size: 48),
-                            ),
-                          )
-                        else
-                          const Icon(Icons.settings, size: 48),
-                        Text(
-                          appName,
-                          style: Theme.of(context).textTheme.labelSmall,
-                          textAlign: TextAlign.center,
-                        ),
-                        if(appFullName != '')
-                          Text(
-                            appFullName,
-                            style: Theme.of(context).textTheme.titleMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                        Text(
-                          '${appData['count']}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        )
-                      ],
-                    )
-                  )
-                )
-              );
-            }).toList(),
-          )
         )
+            : Align(
+              alignment: Alignment.topLeft,
+              child: ExpansionPanelList(
+                elevation: 0,
+                expandedHeaderPadding: const EdgeInsets.all(0),
+                expansionCallback: (int index, bool isExpanded) {
+                  setState(() {
+                    _isExpanded[index] = isExpanded;
+                  });
+                },
+                children: connectionKeys.asMap().entries.map<ExpansionPanel>((entry) {
+                  final index = entry.key;
+                  final appName = entry.value;
+                  final appData = activeConnections[appName]!;
+                  final iconProvider = appData['iconProvider'];
+                  final appFullName = appData['fullName'];
+
+                  return ExpansionPanel(
+                    canTapOnHeader: true,
+                    isExpanded: _isExpanded[index],
+                    headerBuilder: (BuildContext context, bool isExpanded) {
+                      return ListTile(
+                        leading: iconProvider != null
+                            ? Image(
+                          image: iconProvider,
+                          height: 24,
+                          width: 24,
+                          errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.question_answer, size: 24),
+                        )
+                            : const Icon(Icons.settings, size: 29, color: Color.fromARGB(255, 60, 60, 60)),
+                        title: Text(
+                          "($appName) $appFullName",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        subtitle: Text(
+                          '${appData['count']} connections',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      );
+                    },
+                    body: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text("Expanded Content Here")
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
       ],
     );
   }
