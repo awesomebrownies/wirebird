@@ -40,7 +40,7 @@ class LocalNetwork extends StatelessWidget{
             color: Colors.black38,
             spacing: 20.0,
             dotSize: 1.0,
-            shift: -0.5,
+            shift: -4.5,
           ),
         const SizedBox(
           width: 160,
