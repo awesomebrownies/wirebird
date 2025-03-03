@@ -24,7 +24,7 @@ class Firewall extends StatelessWidget {
           child: Image.asset('assets/images/o.png'),
         ),
         SolidWire(
-          width: screenWidth*0.75*0.5 - 56,
+          width: screenWidth*0.75*0.5 - 58,
           activated: true,
         ),
         Selectable(
@@ -35,7 +35,7 @@ class Firewall extends StatelessWidget {
           onClick: () => setSelected("Inspection"),
         ),
         SolidWire(
-          width: screenWidth*0.75*0.5 - 56,
+          width: screenWidth*0.75*0.5 - 58,
           activated: true,
         ),
         SizedBox(
