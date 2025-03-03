@@ -22,6 +22,7 @@ class ConnectionButton extends StatelessWidget{
           style: TextButton.styleFrom(
             backgroundColor: color,
             minimumSize: const Size(130, 50),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero,),
           ),
           onPressed: toggleConnection,
           child: Column(
