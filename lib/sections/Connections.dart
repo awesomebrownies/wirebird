@@ -75,7 +75,6 @@ class _ConnectionsState extends State<Connections> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // const Text("Port"),
-        const Text("Application"),
         // const Text("System"),
         // const Text("Unix Domain Socket"),
         activeConnections.isEmpty
@@ -88,8 +87,7 @@ class _ConnectionsState extends State<Connections> {
               ),
             ],
           ),
-        )
-            : Align(
+        ) : Align(
               alignment: Alignment.topLeft,
               child: ExpansionPanelList(
                 elevation: 0,
@@ -120,22 +118,35 @@ class _ConnectionsState extends State<Connections> {
                           const Icon(Icons.question_answer, size: 24),
                         )
                             : const Icon(Icons.settings, size: 29, color: Color.fromARGB(255, 60, 60, 60)),
-                        title: Text(
-                          "($appName) $appFullName",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+                        title: Row(
+                          children: [
+                            if(appFullName == "") Text("$appName", style: Theme.of(context).textTheme.bodyMedium),
+                            Text("$appFullName", style: Theme.of(context).textTheme.titleMedium),
+                          ]),
                         subtitle: Text(
                           '${appData['count']} connections',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       );
                     },
-                    body: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text("Expanded Content Here")
-                        ],
+                    body: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Table(
+                        border: TableBorder.all(style: BorderStyle.none),
+                        columnWidths: const {
+                          0: FlexColumnWidth(0.25),
+                          1: FlexColumnWidth(0.2),
+                          2: FlexColumnWidth(0.2),
+                        },
+                        children: appData['map'].entries.map<TableRow>((entry) {
+                          final list = entry.value as List<String>;
+                          return TableRow(
+                            children: list.map((item) => Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: Text(item, textAlign: TextAlign.left),
+                            )).toList(),
+                          );
+                        }).toList(),
                       ),
                     ),
                   );

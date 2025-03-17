@@ -79,7 +79,7 @@ class SplitTunnel extends StatelessWidget {
             Selectable(
               imagePath: 'assets/images/control_center.png',
               title: 'Control Center',
-              description: '5 Whitelisted',
+              description: 'None Whitelisted',
               inspectorSelection: inspectorSelection,
               onClick: () => setSelected("Control Center"),
             ),
