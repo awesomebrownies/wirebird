@@ -85,7 +85,7 @@ class OptimizedDottedLinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(OptimizedDottedLinePainter oldDelegate) {
-    return progress != oldDelegate.progress;
+    return progress != oldDelegate.progress || distance != oldDelegate.distance || angle != oldDelegate.angle;
   }
 }
 
@@ -113,6 +113,10 @@ class AnimatedLineConnector extends StatefulWidget {
 
 class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
   double _progress = 0.0;
+  double _lastDistance = 0;
+  double _lastAngle = 0;
+  AnimationSyncManager? _manager;
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -122,10 +126,13 @@ class _AnimatedDottedLineState extends State<AnimatedLineConnector> {
     manager.addListener(_onFrameUpdate);
   }
 
+
   void _onFrameUpdate() {
-    setState(() {
-      _progress = AnimationSyncManager().progress;
-    });
+    if(mounted){
+      setState(() {
+        _progress = AnimationSyncManager().progress;
+      });
+    }
   }
 
   @override

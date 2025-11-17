@@ -230,6 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      Text("Download/Upload/Packet Loss              0Mbps/0Mbps/0%"),
                       Section(
                         title: 'LOCAL NETWORK',
                         color: const Color.fromARGB(255, 240, 240, 240),

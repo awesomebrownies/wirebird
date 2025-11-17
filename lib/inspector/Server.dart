@@ -26,7 +26,7 @@ class _ServerState extends State<Server> {
   // Method to load text from SharedPreferences
   Future<void> _loadSavedText() async {
     final prefs = await SharedPreferences.getInstance();
-    final savedText = prefs.getString('server_config') ?? ''; // Default empty text
+    final savedText = prefs.getString('server_config') ?? '';
     setState(() {
       _textEditingController.text = savedText;
     });

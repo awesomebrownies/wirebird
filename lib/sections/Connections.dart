@@ -74,9 +74,13 @@ class _ConnectionsState extends State<Connections> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // const Text("Port"),
-        // const Text("System"),
-        // const Text("Unix Domain Socket"),
+        TextField(
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+            hintText: 'Enter a connection filter ...',
+          ),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
         activeConnections.isEmpty
             ? const Center(
           child: Column(
@@ -120,7 +124,7 @@ class _ConnectionsState extends State<Connections> {
                             : const Icon(Icons.settings, size: 29, color: Color.fromARGB(255, 60, 60, 60)),
                         title: Row(
                           children: [
-                            if(appFullName == "") Text("$appName", style: Theme.of(context).textTheme.bodyMedium),
+                            if(appFullName == "") Text("$appName", style: Theme.of(context).textTheme.bodyLarge),
                             Text("$appFullName", style: Theme.of(context).textTheme.titleMedium),
                           ]),
                         subtitle: Text(

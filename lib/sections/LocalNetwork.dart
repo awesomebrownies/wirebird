@@ -4,6 +4,7 @@ import 'package:wirebird/Selectable.dart';
 
 import '../DottedWireless.dart';
 
+
 class LocalNetwork extends StatelessWidget{
     final String? wifiName;
     final String? userName;
@@ -35,23 +36,31 @@ class LocalNetwork extends StatelessWidget{
         ),
         if(wifiName != null)
           const AnimatedLineConnector(
-            distance: 175,
-            angle: 0,
+            distance: 75,
+            angle: 0.448798951,
             color: Colors.black38,
             spacing: 20.0,
             dotSize: 1.0,
             shift: -4.5,
           ),
         const SizedBox(
-          width: 160,
-          height: 0,
+          width: 50,
+          height: 60,
         ),
-        Selectable(
-            imagePath: 'assets/images/router.png',
-            title: 'Router',
-            description: wifiName ?? 'No Wi-Fi',
-            inspectorSelection: inspectorSelection,
-            onClick: () => setSelected("Router"),)
+        Column(
+          children: [
+            const SizedBox(
+              width: 0,
+              height: 130,
+            ),
+            Selectable(
+              imagePath: 'assets/images/router.png',
+              title: 'Router',
+              description: wifiName ?? 'No Wi-Fi',
+              inspectorSelection: inspectorSelection,
+              onClick: () => setSelected("Router"),)
+          ]
+        )
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wirebird/DottedWireless.dart';
 
+import '../DottedWireless.dart';
 import '../Selectable.dart';
 import '../SolidWire.dart';
 
